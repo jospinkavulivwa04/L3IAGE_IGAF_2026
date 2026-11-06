@@ -1,4 +1,3 @@
-
 name: Build and Deploy Cecil Site
 
 on:
@@ -28,13 +27,16 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, dom, fileinfo, gd, curl, zip
 
+      - name: Download latest Cecil
+        run: wget -O cecil.phar https://cecil.app/cecil.phar
+
       - name: Build site with Cecil
         run: php cecil.phar build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: 'public'
 
   deploy:
     environment:
