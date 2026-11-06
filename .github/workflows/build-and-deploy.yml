@@ -1,4 +1,5 @@
-name: Build and deploy to GitHub Pages
+
+name: Build and Deploy Cecil Site
 
 on:
   push:
@@ -7,33 +8,42 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Build site with Cecil
-        uses: Cecilapp/Action@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          path: .
-          options: -v --output=docs
+          php-version: '8.2'
+          extensions: mbstring, dom, fileinfo, gd, curl, zip
+
+      - name: Build site with Cecil
+        run: php cecil.phar build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
 
   deploy:
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
+
