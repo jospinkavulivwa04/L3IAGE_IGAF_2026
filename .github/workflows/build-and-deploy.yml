@@ -28,7 +28,7 @@ jobs:
           extensions: mbstring, dom, fileinfo, gd, curl, zip
 
       - name: Download latest Cecil
-        run: run -sSOL https://cecil.app/cecil.phar
+        run: -sSOL https://cecil.app/cecil.phar
 
       - name: Build site with Cecil
         run: php cecil.phar build -vvv
