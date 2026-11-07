@@ -31,7 +31,7 @@ jobs:
         run: wget -O cecil.phar https://cecil.app/cecil.phar
 
       - name: Build site with Cecil
-        run: php cecil.phar build
+        run: php cecil.phar build -vvv
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
